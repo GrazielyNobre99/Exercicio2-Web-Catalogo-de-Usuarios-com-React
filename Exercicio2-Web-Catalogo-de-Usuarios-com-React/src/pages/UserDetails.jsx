@@ -3,18 +3,6 @@ import { useParams, Link } from 'react-router-dom';
 import { getUser, getUserPosts } from '../services/api';
 import Modal from '../components/Modal';
 
-const cearaCities = [
-  'Quixadá',
-  'Fortaleza',
-  'Juazeiro do Norte',
-  'Sobral',
-  'Crato',
-  'Itapipoca',
-  'Maracanaú',
-  'Caucaia',
-  'Iguatu',
-  'Canindé',
-];
 
 const LoadingSpinner = ({ text }) => (
   <div className="loading-container">
@@ -45,11 +33,6 @@ function UserDetails() {
           getUser(id),
           getUserPosts(id),
         ]);
-
-        const cityIndex = userData.id - 1;
-        if (cearaCities[cityIndex]) {
-          userData.address.city = cearaCities[cityIndex];
-        }
                 
         setUser(userData);
         setPosts(postsData);

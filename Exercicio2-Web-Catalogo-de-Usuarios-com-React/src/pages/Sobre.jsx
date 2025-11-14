@@ -7,7 +7,7 @@ function Sobre (){
             <h2>Sobre esta Aplicação</h2>
 
             <div className="about-content">
-                <p><strong>Sobre: </strong> Esta aplicação é um catálogo de usuários
+                <p>Esta aplicação é um catálogo de usuários
                 que demonstra o uso de React consumindo uma API, que neste caso é a <strong>API JSONPlacehouder</strong></p>
 
                 <p><strong>Tecnologias Utilizadas: </strong>

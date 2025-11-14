@@ -1,44 +1,28 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { getUsers, getAllPosts } from '../services/api';
+import { Link } from 'react-router-dom';
 
 const USERS_PER_PAGE = 5;
 
-// Substituindo por cidades no Ceará
-const cearaCities = [
-    'Quixadá',
-    'Fortaleza',
-    'Juazeiro do Norte',
-    'Sobral',
-    'Crato',
-    'Itapipoca',
-    'Maracanaú',
-    'Caucaia',
-    'Iguatu',
-    'Canindé',
-]
 
 const LoadingSpinner = ({ text }) => (
     <div className="loading-container">
-        <div calssName="spinner"></div>
+        <div className="spinner"></div>
         <div className="loading-text">{text}</div>
     </div>
 );
 
 function Home() {
 
-    const [user, setUsers] = useState([]);
+    const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [erro, setError] = useState(null);
+    const [error, setError] = useState(null);
 
     const [postCounts, setPostCounts] = useState({});
 
     const [searchTerm, setSearchTerm] = useState(
-        () => localStorage.getIrem('filterSearchTerm') || ''
-    );
-
-    const [selectdCity, setSelecetdCity] = useState(
-        () => localStorage.getItem('filterSelectedCity') || ''
+        () => localStorage.getItem('filterSearchTerm') || ''
     );
 
     // Estado da página atual
@@ -52,28 +36,18 @@ function Home() {
         // Buscas usuários e todos os POST
         Promise.all([getUsers(), getAllPosts()])
             .then(([usersData, allPostsData]) => {
-                // Mapea os usuarios para cidade determinadas
-                const mappedUsers = usersData.map((user) => {
 
-                    const cityIndex = user.id - 1;
-
-                    // Se o indice existi na lista, troca a cidade.
-                    if (cearaCities[cityIndex]) {
-                        user.address.city = cearaCities[cityIndex];
-                    }
-
-                    return user;
-                });
-
-                setUsers(mappedUsers);
-
-                const count = {};
-                for (const post of allPostData) {
-                    counts[post.userId] = (counts[post.userId] || 0) + 1;
+                const postCountsMap = {};
+                for (const post of allPostsData) {
+                    postCountsMap[post.userId] = (postCountsMap[post.userId] || 0) + 1;
                 }
-                setPostCounts(counts);
+
+                setUsers(usersData);
+
+                setPostCounts(postCountsMap);
+
             })
-            .cath((err) => {
+            .catch((err) => {
                 setError(err.message);
             })
             .finally(() => {
@@ -81,11 +55,14 @@ function Home() {
             });
     };
 
+    useEffect(() => {
+        fetchUsersAndPosts();
+    }, []);
+
     // Executa a função de busca na primeira vez que o componente é montado
     useEffect(() => {
         localStorage.setItem('filterSearchTerm', searchTerm);
-        localStorage.setItem('filterSelectedCity', filterSelectedCity);
-    }, [searchTerm, selectdCity]);
+    }, [searchTerm]);
 
     // lista das cidades a partir dos usuários mapeados
     const cities = [...new Set(users.map((user) => user.address.city))].sort();
@@ -94,13 +71,12 @@ function Home() {
         const matchesSearch =
             user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.email.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesCity = selectedCity === '' || user.address.city === selectedCity;
-        return matchesSearch && matchesCity;
+        return matchesSearch;
     });
 
     useEffect(() => {
         setCurrentPage(1); // Retorna a página 1 sempre que a busca/filtro mudar
-    }, [searchTerm, selectedCity]);
+    }, [searchTerm]);
 
     // Paginação
     const totalPages = Math.ceil(filteredUsers.length / USERS_PER_PAGE);
@@ -136,21 +112,6 @@ function Home() {
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
-                    </div>
-                    <div className="filter-group">
-                        <label htmlFor="city">Filtrar por Cidade</label>
-                        <select
-                            id="city"
-                            value={selectedCity}
-                            onChange={(e) => setSelectedCity(e.target.value)}
-                        >
-                            <option value="">Todas as Cidades</option>
-                            {cities.map((city) => (
-                                <option key={city} value={city}>
-                                    {city}
-                                </option>
-                            ))}
-                        </select>
                     </div>
                 </div>
 

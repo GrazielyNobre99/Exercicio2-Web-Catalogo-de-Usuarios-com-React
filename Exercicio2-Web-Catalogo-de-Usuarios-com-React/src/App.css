@@ -33,13 +33,13 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 20px 0;
-  border-bottom: 2px solid #eee;
+  border-bottom: 2px solid #000000;
   margin-bottom: 20px;
 }
 
 .app-header h1 {
   margin: 0;
-  font-size: 24px;
+  font-size: 26px;
 }
 
 .app-header nav {
@@ -49,15 +49,15 @@ body {
 
 .nav-link {
   text-decoration: none;
-  color: #007bff;
+  color: #005cbe;
   font-weight: bold;
   padding: 5px 0;
   border-bottom: 2px solid transparent;
 }
 
 .nav-link.active {
-  color: #0056b3;
-  border-bottom-color: #0056b3;
+  color: #012f61;
+  border-bottom-color: #012f61;
 }
 
 /* ESTADOS LOADING/ERROR */

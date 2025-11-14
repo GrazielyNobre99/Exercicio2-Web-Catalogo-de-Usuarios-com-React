@@ -1,5 +1,6 @@
 import React from 'react';
-import { Routes, Route} from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import Header from './components/Header';
 import Home from './pages/Home';
 import Sobre from './pages/Sobre';
@@ -10,17 +11,20 @@ function App() {
 
   return (
     <>
-      <div className="App">
-        <Header/>
+      <BrowserRouter>
+        <div className="App">
+          <Header />
 
-        <main classname="container">
-          <Routes>
-            <Route path="/" element={<Home/>}/>
-            <Route path="/sobre" element={<Sobre/>}/>
-            <Route path="/usuario/:id" element={<UserDetails/>}/>
-          </Routes>
-        </main>
-      </div>
+          <main className="container">
+
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/sobre" element={<Sobre />} />
+              <Route path="/usuario/:id" element={<UserDetails />} />
+            </Routes>
+          </main>
+        </div>
+      </BrowserRouter>
     </>
   )
 }
